@@ -6,11 +6,11 @@
     End Sub
 
     Public Function generarUniforme(ByVal a As Integer, ByVal b As Integer) As Double
-        Return a + random.NextDouble() * (b - a)
+        Return Math.Round((a + random.NextDouble() * (b - a)), 4)
     End Function
 
     Public Function generarExponencialNegativa(ByVal media As Double) As Double
-        Return media * -1 * Math.Log(1 - random.NextDouble())
+        Return Math.Round((media * -1 * Math.Log(1 - random.NextDouble())), 4)
     End Function
 
     Public Function generarNormal(ByVal media As Double, ByVal desviacionEst As Double) As Double
@@ -20,7 +20,7 @@
 
         Next index
         acu -= 6
-        Return acu * desviacionEst + media
+        Return Math.Round((acu * desviacionEst + media), 4)
     End Function
 
 
