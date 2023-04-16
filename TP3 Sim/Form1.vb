@@ -143,22 +143,32 @@ Public Class Form1
         LstAleatorios.Items.Clear()
         BtnGenerar.Enabled = True
         txtCantidad.Enabled = True
-        txtIntervalos.Enabled = True
+        CmbIntervalos.Enabled = True
         Select Case CmbDistribuciones.SelectedIndex
             Case 0
 
                 txtA.Enabled = True
                 txtA.Focus()
                 txtB.Enabled = True
+                TxtLambda.Enabled = False
+                TxtMedia.Enabled = False
+                TxtDesv.Enabled = False
 
             Case 1
                 TxtLambda.Enabled = True
                 TxtLambda.Focus()
+                txtA.Enabled = False
+                txtB.Enabled = False
+                TxtMedia.Enabled = False
+                TxtDesv.Enabled = False
 
             Case 2
                 TxtMedia.Enabled = True
                 TxtDesv.Enabled = True
                 TxtMedia.Focus()
+                txtA.Enabled = False
+                txtB.Enabled = False
+                TxtLambda.Enabled = False
         End Select
 
     End Sub
@@ -168,7 +178,7 @@ Public Class Form1
         For Each item As Control In Me.Controls
             If (item.GetType.ToString = "System.Windows.Forms.MaskedTextBox") Or (item.GetType.ToString = "System.Windows.Forms.TextBox") Then
                 item.Text = ""
-
+                CmbIntervalos.SelectedIndex = -1
             End If
         Next
 
@@ -390,12 +400,9 @@ Public Class Form1
         Return ((1 / (desvEstandar * Math.Sqrt(2 * Math.PI))) * Math.Exp(-1 * 0.5 * Math.Pow((x - media) / desvEstandar, 2)))
     End Function
 
-    Private Sub txtIntervalos_TextChanged(sender As Object, e As EventArgs)
+    
 
-    End Sub
 
-    Private Sub label2_Click(sender As Object, e As EventArgs)
 
-    End Sub
 End Class
 
