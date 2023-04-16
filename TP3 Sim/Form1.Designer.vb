@@ -22,10 +22,10 @@ Partial Class Form1
     'No lo modifique con el editor de código.
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
-        Dim ChartArea3 As System.Windows.Forms.DataVisualization.Charting.ChartArea = New System.Windows.Forms.DataVisualization.Charting.ChartArea()
-        Dim Legend3 As System.Windows.Forms.DataVisualization.Charting.Legend = New System.Windows.Forms.DataVisualization.Charting.Legend()
-        Dim Series3 As System.Windows.Forms.DataVisualization.Charting.Series = New System.Windows.Forms.DataVisualization.Charting.Series()
-        Dim Title3 As System.Windows.Forms.DataVisualization.Charting.Title = New System.Windows.Forms.DataVisualization.Charting.Title()
+        Dim ChartArea4 As System.Windows.Forms.DataVisualization.Charting.ChartArea = New System.Windows.Forms.DataVisualization.Charting.ChartArea()
+        Dim Legend4 As System.Windows.Forms.DataVisualization.Charting.Legend = New System.Windows.Forms.DataVisualization.Charting.Legend()
+        Dim Series4 As System.Windows.Forms.DataVisualization.Charting.Series = New System.Windows.Forms.DataVisualization.Charting.Series()
+        Dim Title4 As System.Windows.Forms.DataVisualization.Charting.Title = New System.Windows.Forms.DataVisualization.Charting.Title()
         Me.txtV = New System.Windows.Forms.TextBox()
         Me.TxtChiCuadrado = New System.Windows.Forms.TextBox()
         Me.TxtDesv = New System.Windows.Forms.TextBox()
@@ -36,10 +36,9 @@ Partial Class Form1
         Me.BtnGenerar = New System.Windows.Forms.Button()
         Me.LstAleatorios = New System.Windows.Forms.ListBox()
         Me.txtCantidad = New System.Windows.Forms.TextBox()
-        Me.txtIntervalos = New System.Windows.Forms.TextBox()
         Me.txtA = New System.Windows.Forms.TextBox()
         Me.txtB = New System.Windows.Forms.TextBox()
-        Me.comboBox1 = New System.Windows.Forms.ComboBox()
+        Me.CmbIntervalos = New System.Windows.Forms.ComboBox()
         Me.label15 = New System.Windows.Forms.Label()
         Me.label14 = New System.Windows.Forms.Label()
         Me.label13 = New System.Windows.Forms.Label()
@@ -53,16 +52,17 @@ Partial Class Form1
         Me.label3 = New System.Windows.Forms.Label()
         Me.grafico = New System.Windows.Forms.DataVisualization.Charting.Chart()
         Me.dataGridView1 = New System.Windows.Forms.DataGridView()
-        Me.Inferior = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.Superior = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.FO = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.FE = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.Acumulado = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.label1 = New System.Windows.Forms.Label()
         Me.label10 = New System.Windows.Forms.Label()
         Me.label6 = New System.Windows.Forms.Label()
         Me.Label16 = New System.Windows.Forms.Label()
         Me.Label17 = New System.Windows.Forms.Label()
+        Me.Aleatorios = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.Inferior = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.Superior = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.FO = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.FE = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.Acumulado = New System.Windows.Forms.DataGridViewTextBoxColumn()
         CType(Me.grafico, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.dataGridView1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
@@ -123,7 +123,7 @@ Partial Class Form1
         '
         Me.LblDistribucion.AutoSize = True
         Me.LblDistribucion.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.LblDistribucion.Location = New System.Drawing.Point(73, 119)
+        Me.LblDistribucion.Location = New System.Drawing.Point(37, 119)
         Me.LblDistribucion.Name = "LblDistribucion"
         Me.LblDistribucion.Size = New System.Drawing.Size(125, 20)
         Me.LblDistribucion.TabIndex = 25
@@ -133,10 +133,10 @@ Partial Class Form1
         '
         Me.CmbDistribuciones.AccessibleRole = System.Windows.Forms.AccessibleRole.TitleBar
         Me.CmbDistribuciones.FormattingEnabled = True
-        Me.CmbDistribuciones.Items.AddRange(New Object() {"UNIFORME", "EXPONENCIAL", "POOO", "NORMAL"})
-        Me.CmbDistribuciones.Location = New System.Drawing.Point(228, 118)
+        Me.CmbDistribuciones.Items.AddRange(New Object() {"UNIFORME", "EXPONENCIAL", "NORMAL"})
+        Me.CmbDistribuciones.Location = New System.Drawing.Point(178, 118)
         Me.CmbDistribuciones.Name = "CmbDistribuciones"
-        Me.CmbDistribuciones.Size = New System.Drawing.Size(42, 21)
+        Me.CmbDistribuciones.Size = New System.Drawing.Size(124, 21)
         Me.CmbDistribuciones.TabIndex = 21
         '
         'BtnGenerar
@@ -155,7 +155,7 @@ Partial Class Form1
         'LstAleatorios
         '
         Me.LstAleatorios.FormattingEnabled = True
-        Me.LstAleatorios.Location = New System.Drawing.Point(335, 28)
+        Me.LstAleatorios.Location = New System.Drawing.Point(327, 29)
         Me.LstAleatorios.Name = "LstAleatorios"
         Me.LstAleatorios.Size = New System.Drawing.Size(149, 186)
         Me.LstAleatorios.TabIndex = 33
@@ -168,14 +168,6 @@ Partial Class Form1
         Me.txtCantidad.Name = "txtCantidad"
         Me.txtCantidad.Size = New System.Drawing.Size(40, 26)
         Me.txtCantidad.TabIndex = 43
-        '
-        'txtIntervalos
-        '
-        Me.txtIntervalos.Enabled = False
-        Me.txtIntervalos.Location = New System.Drawing.Point(262, 550)
-        Me.txtIntervalos.Name = "txtIntervalos"
-        Me.txtIntervalos.Size = New System.Drawing.Size(40, 20)
-        Me.txtIntervalos.TabIndex = 43
         '
         'txtA
         '
@@ -197,15 +189,15 @@ Partial Class Form1
         Me.txtB.Size = New System.Drawing.Size(40, 26)
         Me.txtB.TabIndex = 24
         '
-        'comboBox1
+        'CmbIntervalos
         '
-        Me.comboBox1.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.comboBox1.FormattingEnabled = True
-        Me.comboBox1.Items.AddRange(New Object() {"10", "15", "20", "25"})
-        Me.comboBox1.Location = New System.Drawing.Point(211, 546)
-        Me.comboBox1.Name = "comboBox1"
-        Me.comboBox1.Size = New System.Drawing.Size(45, 26)
-        Me.comboBox1.TabIndex = 73
+        Me.CmbIntervalos.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.CmbIntervalos.FormattingEnabled = True
+        Me.CmbIntervalos.Items.AddRange(New Object() {"10", "15", "20", "25"})
+        Me.CmbIntervalos.Location = New System.Drawing.Point(211, 546)
+        Me.CmbIntervalos.Name = "CmbIntervalos"
+        Me.CmbIntervalos.Size = New System.Drawing.Size(45, 26)
+        Me.CmbIntervalos.TabIndex = 73
         '
         'label15
         '
@@ -321,59 +313,34 @@ Partial Class Form1
         '
         'grafico
         '
-        ChartArea3.Name = "ChartArea1"
-        Me.grafico.ChartAreas.Add(ChartArea3)
+        ChartArea4.Name = "ChartArea1"
+        Me.grafico.ChartAreas.Add(ChartArea4)
         Me.grafico.Cursor = System.Windows.Forms.Cursors.Default
-        Legend3.Name = "Legend1"
-        Me.grafico.Legends.Add(Legend3)
+        Legend4.Name = "Legend1"
+        Me.grafico.Legends.Add(Legend4)
         Me.grafico.Location = New System.Drawing.Point(345, 305)
         Me.grafico.Name = "grafico"
         Me.grafico.Palette = System.Windows.Forms.DataVisualization.Charting.ChartColorPalette.Berry
-        Series3.ChartArea = "ChartArea1"
-        Series3.Legend = "Legend1"
-        Series3.Name = "FO"
-        Me.grafico.Series.Add(Series3)
+        Series4.ChartArea = "ChartArea1"
+        Series4.Legend = "Legend1"
+        Series4.Name = "FO"
+        Me.grafico.Series.Add(Series4)
         Me.grafico.Size = New System.Drawing.Size(689, 360)
         Me.grafico.TabIndex = 51
         Me.grafico.Text = "Histograma"
-        Title3.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Title3.Name = "HISTOGRAMA DE FO"
-        Title3.Text = "HISTOGRAMA DE FO"
-        Me.grafico.Titles.Add(Title3)
+        Title4.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Title4.Name = "HISTOGRAMA DE FO"
+        Title4.Text = "HISTOGRAMA DE FO"
+        Me.grafico.Titles.Add(Title4)
         '
         'dataGridView1
         '
         Me.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
-        Me.dataGridView1.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.Inferior, Me.Superior, Me.FO, Me.FE, Me.Acumulado})
-        Me.dataGridView1.Location = New System.Drawing.Point(490, 29)
+        Me.dataGridView1.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.Aleatorios, Me.Inferior, Me.Superior, Me.FO, Me.FE, Me.Acumulado})
+        Me.dataGridView1.Location = New System.Drawing.Point(477, 29)
         Me.dataGridView1.Name = "dataGridView1"
-        Me.dataGridView1.Size = New System.Drawing.Size(544, 186)
+        Me.dataGridView1.Size = New System.Drawing.Size(651, 186)
         Me.dataGridView1.TabIndex = 49
-        '
-        'Inferior
-        '
-        Me.Inferior.HeaderText = "Inferior"
-        Me.Inferior.Name = "Inferior"
-        '
-        'Superior
-        '
-        Me.Superior.HeaderText = "Superior"
-        Me.Superior.Name = "Superior"
-        '
-        'FO
-        '
-        Me.FO.HeaderText = "FO"
-        Me.FO.Name = "FO"
-        '
-        'FE
-        '
-        Me.FE.HeaderText = "FE"
-        Me.FE.Name = "FE"
-        '
-        'Acumulado
-        '
-        Me.Acumulado.HeaderText = "Acumulado"
-        Me.Acumulado.Name = "Acumulado"
         '
         'label1
         '
@@ -429,13 +396,43 @@ Partial Class Form1
         Me.Label17.TabIndex = 75
         Me.Label17.Text = " " & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "                                                        " & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10)
         '
+        'Aleatorios
+        '
+        Me.Aleatorios.HeaderText = "Aleatorios"
+        Me.Aleatorios.Name = "Aleatorios"
+        '
+        'Inferior
+        '
+        Me.Inferior.HeaderText = "Inferior"
+        Me.Inferior.Name = "Inferior"
+        '
+        'Superior
+        '
+        Me.Superior.HeaderText = "Superior"
+        Me.Superior.Name = "Superior"
+        '
+        'FO
+        '
+        Me.FO.HeaderText = "FO"
+        Me.FO.Name = "FO"
+        '
+        'FE
+        '
+        Me.FE.HeaderText = "FE"
+        Me.FE.Name = "FE"
+        '
+        'Acumulado
+        '
+        Me.Acumulado.HeaderText = "Acumulado"
+        Me.Acumulado.Name = "Acumulado"
+        '
         'Form1
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(1094, 727)
+        Me.ClientSize = New System.Drawing.Size(1131, 727)
         Me.Controls.Add(Me.Label16)
-        Me.Controls.Add(Me.comboBox1)
+        Me.Controls.Add(Me.CmbIntervalos)
         Me.Controls.Add(Me.label15)
         Me.Controls.Add(Me.label14)
         Me.Controls.Add(Me.label13)
@@ -450,7 +447,6 @@ Partial Class Form1
         Me.Controls.Add(Me.grafico)
         Me.Controls.Add(Me.dataGridView1)
         Me.Controls.Add(Me.label1)
-        Me.Controls.Add(Me.txtIntervalos)
         Me.Controls.Add(Me.txtCantidad)
         Me.Controls.Add(Me.txtV)
         Me.Controls.Add(Me.TxtChiCuadrado)
@@ -484,10 +480,9 @@ Partial Class Form1
     Friend WithEvents BtnGenerar As System.Windows.Forms.Button
     Friend WithEvents LstAleatorios As System.Windows.Forms.ListBox
     Friend WithEvents txtCantidad As System.Windows.Forms.TextBox
-    Friend WithEvents txtIntervalos As System.Windows.Forms.TextBox
     Friend WithEvents txtA As System.Windows.Forms.TextBox
     Friend WithEvents txtB As System.Windows.Forms.TextBox
-    Private WithEvents comboBox1 As ComboBox
+    Private WithEvents CmbIntervalos As ComboBox
     Private WithEvents label15 As Label
     Private WithEvents label14 As Label
     Private WithEvents label13 As Label
@@ -501,14 +496,15 @@ Partial Class Form1
     Private WithEvents label3 As Label
     Private WithEvents grafico As DataVisualization.Charting.Chart
     Private WithEvents dataGridView1 As DataGridView
-    Private WithEvents Inferior As DataGridViewTextBoxColumn
-    Private WithEvents Superior As DataGridViewTextBoxColumn
-    Private WithEvents FO As DataGridViewTextBoxColumn
-    Private WithEvents FE As DataGridViewTextBoxColumn
-    Private WithEvents Acumulado As DataGridViewTextBoxColumn
     Private WithEvents label1 As Label
     Private WithEvents label10 As Label
     Private WithEvents label6 As Label
     Private WithEvents Label16 As Label
     Private WithEvents Label17 As Label
+    Friend WithEvents Aleatorios As DataGridViewTextBoxColumn
+    Friend WithEvents Inferior As DataGridViewTextBoxColumn
+    Friend WithEvents Superior As DataGridViewTextBoxColumn
+    Friend WithEvents FO As DataGridViewTextBoxColumn
+    Friend WithEvents FE As DataGridViewTextBoxColumn
+    Friend WithEvents Acumulado As DataGridViewTextBoxColumn
 End Class

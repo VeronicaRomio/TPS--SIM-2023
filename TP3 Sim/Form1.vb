@@ -1,6 +1,7 @@
 ﻿
 
 Imports TP3_Sim.GeneradorVariables
+
 Public Class Form1
     Dim random As GeneradorVariables
     Dim ancho As Double
@@ -17,27 +18,27 @@ Public Class Form1
     Private Sub BtnGenerar_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles BtnGenerar.Click
 
         inicializarChart()
-            BtnGenerar.Enabled = True
-            For index = 1 To Integer.Parse(TxtCantidad.Text)
+        BtnGenerar.Enabled = True
+        For index = 1 To Integer.Parse(txtCantidad.Text)
 
-                If CmbDistribuciones.SelectedIndex = 0 Then
-                    LstAleatorios.Items.Add(random.generarUniforme(Integer.Parse(TxtA.Text), Integer.Parse(TxtB.Text)))
-                End If
+            If CmbDistribuciones.SelectedIndex = 0 Then
+                LstAleatorios.Items.Add(random.generarUniforme(Integer.Parse(txtA.Text), Integer.Parse(txtB.Text)))
+            End If
 
-                If CmbDistribuciones.SelectedIndex = 1 Then
-                    LstAleatorios.Items.Add(random.generarExponencialNegativa(1 / (Double.Parse(TxtLambda.Text.Replace(".", ",")))))
+            If CmbDistribuciones.SelectedIndex = 1 Then
+                LstAleatorios.Items.Add(random.generarExponencialNegativa(1 / (Double.Parse(TxtLambda.Text.Replace(".", ",")))))
 
-                End If
+            End If
 
-            If CmbDistribuciones.SelectedIndex = 3 Then
+            If CmbDistribuciones.SelectedIndex = 2 Then
                 LstAleatorios.Items.Add(random.generarNormal(Double.Parse(TxtMedia.Text.Replace(".", ",")), Double.Parse(TxtDesv.Text.Replace(".", ","))))
 
             End If
         Next index
 
-            graficar()
-            calcularChiCuadrado()
-            BtnGenerar.Enabled = False
+        graficar()
+        calcularChiCuadrado()
+        BtnGenerar.Enabled = False
 
     End Sub
 
@@ -62,12 +63,11 @@ Public Class Form1
 
         Select Case CmbDistribuciones.SelectedIndex
             Case 0
-                graficarDistribuciones(Double.Parse(TxtA.Text), Double.Parse(TxtB.Text), False)
+                graficarDistribuciones(Double.Parse(txtA.Text), Double.Parse(txtB.Text), False)
             Case 1
                 graficarDistribuciones(0, obtenerMax(), False)
+
             Case 2
-                graficarDistribuciones(obtenerMin(), obtenerMax(), True)
-            Case 3
                 graficarDistribuciones(obtenerMin(), obtenerMax(), False)
         End Select
 
@@ -81,17 +81,16 @@ Public Class Form1
         If sinIntervalos = False Then
 
             Dim sim As String = ")"
-            ancho = (maximo - minimo) / Double.Parse(txtIntervalos.Text)
+            ancho = (maximo - minimo) / Double.Parse(CmbIntervalos.Text)
 
 
-
-            For index = 0 To txtIntervalos.Text - 1
+            For index = 0 To CmbIntervalos.Text - 1
                 acum = 0
                 Dim num As Double = (ancho * index) + minimo
 
                 For Each item As Double In LstAleatorios.Items
 
-                    If (index < txtIntervalos.Text - 1) Then
+                    If (index < CmbIntervalos.Text - 1) Then
                         If (num <= item) And ((num + ancho) > item) Then
                             acum += 1
 
@@ -134,7 +133,7 @@ Public Class Form1
 
     End Sub
 
-    
+
 
 
 
@@ -143,25 +142,20 @@ Public Class Form1
         inicializarChart()
         LstAleatorios.Items.Clear()
         BtnGenerar.Enabled = True
-        TxtCantidad.Enabled = True
+        txtCantidad.Enabled = True
         txtIntervalos.Enabled = True
         Select Case CmbDistribuciones.SelectedIndex
             Case 0
 
-                TxtA.Enabled = True
-                TxtA.Focus()
-                TxtB.Enabled = True
+                txtA.Enabled = True
+                txtA.Focus()
+                txtB.Enabled = True
 
             Case 1
                 TxtLambda.Enabled = True
                 TxtLambda.Focus()
 
             Case 2
-                TxtLambda.Enabled = True
-                TxtLambda.Focus()
-                txtIntervalos.Enabled = False
-
-            Case 3
                 TxtMedia.Enabled = True
                 TxtDesv.Enabled = True
                 TxtMedia.Focus()
@@ -208,8 +202,6 @@ Public Class Form1
             Case 1
                 ChiCuadradoExponencialNegativa()
             Case 2
-                ChiCuadradoPoisson()
-            Case 3
                 ChiCuadradoNormal()
 
         End Select
@@ -248,7 +240,7 @@ Public Class Form1
         For index = 0 To frecEsperada.Length - 1
 
 
-            frecEsperada(index) = Double.Parse(TxtLambda.Text.Replace(".", ",")) * Math.Exp(Double.Parse(TxtLambda.Text.Replace(".", ",") * -1 * marcaClase(index))) * Integer.Parse(TxtCantidad.Text)
+            frecEsperada(index) = Double.Parse(TxtLambda.Text.Replace(".", ",")) * Math.Exp(Double.Parse(TxtLambda.Text.Replace(".", ",") * -1 * marcaClase(index))) * Integer.Parse(txtCantidad.Text)
 
         Next
 
@@ -279,47 +271,7 @@ Public Class Form1
         Return frecObservada
     End Function
 
-    Private Sub ChiCuadradoPoisson()
 
-        Dim valor As Double
-        Dim frecObservada() As Double = frecuenciaObs()
-
-        Dim frecEsperada(frecObservada.Length - 1) As Double
-
-
-        Dim suma As Double = 0
-        For index = 0 To frecEsperada.Length - 2
-
-            Dim factorial As Double = 1
-            For i = 0 To Integer.Parse(grafico.Series(0).Points(index).XValue)
-                If (i <> 0) Then
-                    factorial *= i
-                End If
-            Next
-            frecEsperada(index) = (Math.Pow(Double.Parse(TxtLambda.Text.Replace(".", ",")), Double.Parse(grafico.Series(0).Points(index).XValue)) * Math.Exp(-1 * TxtLambda.Text.Replace(".", ",")) / (factorial))
-            suma += frecEsperada(index)
-        Next
-
-
-        frecEsperada(frecEsperada.Length - 1) = 1 - suma
-        For index = 0 To frecEsperada.Length - 1
-            frecEsperada(index) = frecEsperada(index) * Double.Parse(TxtCantidad.Text)
-        Next
-
-
-        Dim lista As List(Of Double()) = tratarFrecuencias(frecObservada, frecEsperada)
-
-        frecObservada = lista.Item(0)
-        frecEsperada = lista.Item(1)
-
-        For index = 0 To frecEsperada.Length - 1
-
-            valor += (Math.Pow((frecEsperada(index) - frecObservada(index)), 2) / frecEsperada(index))
-
-        Next
-
-        TxtChiCuadrado.Text = String.Format("{0:C4}", valor).Replace("$", "").Replace("€", "")
-    End Sub
 
     Private Sub ChiCuadradoNormal()
 
@@ -332,7 +284,7 @@ Public Class Form1
 
             Dim limsup As Double = Double.Parse(Split(grafico.Series(0).Points(index).AxisLabel.Replace(")", "").Replace("]", "").Replace(".", ","), "_", 2)(1))
 
-            frecEsperada(index) = (((PrPuntualNormal(limInf) + PrPuntualNormal(limsup)) / 2) * ancho) * Double.Parse(TxtCantidad.Text)
+            frecEsperada(index) = (((PrPuntualNormal(limInf) + PrPuntualNormal(limsup)) / 2) * ancho) * Double.Parse(txtCantidad.Text)
 
         Next
 
@@ -438,7 +390,7 @@ Public Class Form1
         Return ((1 / (desvEstandar * Math.Sqrt(2 * Math.PI))) * Math.Exp(-1 * 0.5 * Math.Pow((x - media) / desvEstandar, 2)))
     End Function
 
-    Private Sub txtIntervalos_TextChanged(sender As Object, e As EventArgs) Handles txtIntervalos.TextChanged
+    Private Sub txtIntervalos_TextChanged(sender As Object, e As EventArgs)
 
     End Sub
 
