@@ -186,7 +186,7 @@ Public Class Form1
 
 
                 Next
-                marca = (num + num + ancho) / 2
+                marca = Math.Round((num + num + ancho) / 2, 4)
                 Dim fd As Double = (lambda * Math.Pow(Math.E, -lambda * marca)) * num
                 Dim fa As Double = ((1 - Math.Pow(Math.E, -lambda * (num + ancho))) - (1 - Math.Pow(Math.E, -lambda * num)))
                 Dim fe As Double = Math.Round(fa / n, 4)
