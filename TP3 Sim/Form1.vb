@@ -80,7 +80,8 @@ Public Class Form1
     End Sub
 
     'graficarDistribucionesUniforme(): funcion que nos ayuda a graficar la distribucion Uniforme y a llenar la tabla
-    '                                  de datos de las frecuencias y los limites
+    '                                  de datos de las frecuencias y los limites. Recibe como parametros el minimo,
+    '                                  maximo y el boolean sinIntervalos
     Private Sub graficarDistribucionesUniforme(ByVal min As Double, ByVal max As Double, ByVal sinIntervalos As Boolean)
         Dim minimo As Double = min
         Dim maximo As Double = max
@@ -91,13 +92,13 @@ Public Class Form1
 
 
         If sinIntervalos = False Then
-
+            'la variable sim es para delimitar el final de los limites en el grafico
             Dim sim As String = ")"
             ancho = Math.Round((maximo - minimo) / Double.Parse(CmbIntervalos.Text), 4)
 
 
             For index = 0 To CmbIntervalos.Text - 1
-                acum = 0
+                acum = 0 'son las frecuencias observadas
                 Dim num As Double = (ancho * index) + minimo
 
                 For Each item As Double In ListaAleatorios.Items
@@ -156,13 +157,13 @@ Public Class Form1
         Dim acum As Integer
         Dim n As Double = Double.Parse(txtCantidad.Text)
         Dim lambda As Double = Double.Parse(TxtLambda.Text)
-        Dim marca As Double '= (maximo + minimo) / 2
+        Dim marca As Double
 
 
         If sinIntervalos = False Then
 
             Dim sim As String = ")"
-            ancho = (maximo - minimo) / Double.Parse(CmbIntervalos.Text)
+            ancho = Math.Round((maximo - minimo) / Double.Parse(CmbIntervalos.Text), 4)
 
 
             For index = 0 To CmbIntervalos.Text - 1
@@ -186,6 +187,7 @@ Public Class Form1
 
 
                 Next
+                'num+ancho es el limite superior
                 marca = Math.Round((num + num + ancho) / 2, 4)
                 Dim fd As Double = (lambda * Math.Pow(Math.E, -lambda * marca)) * num
                 Dim fa As Double = ((1 - Math.Pow(Math.E, -lambda * (num + ancho))) - (1 - Math.Pow(Math.E, -lambda * num)))
