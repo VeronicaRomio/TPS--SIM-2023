@@ -22,12 +22,10 @@ Partial Class Form1
     'No lo modifique con el editor de código.
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
-        Dim ChartArea1 As System.Windows.Forms.DataVisualization.Charting.ChartArea = New System.Windows.Forms.DataVisualization.Charting.ChartArea()
-        Dim Legend1 As System.Windows.Forms.DataVisualization.Charting.Legend = New System.Windows.Forms.DataVisualization.Charting.Legend()
-        Dim Series1 As System.Windows.Forms.DataVisualization.Charting.Series = New System.Windows.Forms.DataVisualization.Charting.Series()
-        Dim Title1 As System.Windows.Forms.DataVisualization.Charting.Title = New System.Windows.Forms.DataVisualization.Charting.Title()
-        Me.txtV = New System.Windows.Forms.TextBox()
-        Me.TxtChiCuadrado = New System.Windows.Forms.TextBox()
+        Dim ChartArea2 As System.Windows.Forms.DataVisualization.Charting.ChartArea = New System.Windows.Forms.DataVisualization.Charting.ChartArea()
+        Dim Legend2 As System.Windows.Forms.DataVisualization.Charting.Legend = New System.Windows.Forms.DataVisualization.Charting.Legend()
+        Dim Series2 As System.Windows.Forms.DataVisualization.Charting.Series = New System.Windows.Forms.DataVisualization.Charting.Series()
+        Dim Title2 As System.Windows.Forms.DataVisualization.Charting.Title = New System.Windows.Forms.DataVisualization.Charting.Title()
         Me.TxtDesv = New System.Windows.Forms.TextBox()
         Me.TxtMedia = New System.Windows.Forms.TextBox()
         Me.TxtLambda = New System.Windows.Forms.TextBox()
@@ -40,9 +38,6 @@ Partial Class Form1
         Me.txtB = New System.Windows.Forms.TextBox()
         Me.CmbIntervalos = New System.Windows.Forms.ComboBox()
         Me.label15 = New System.Windows.Forms.Label()
-        Me.label14 = New System.Windows.Forms.Label()
-        Me.label13 = New System.Windows.Forms.Label()
-        Me.label12 = New System.Windows.Forms.Label()
         Me.label11 = New System.Windows.Forms.Label()
         Me.label9 = New System.Windows.Forms.Label()
         Me.label7 = New System.Windows.Forms.Label()
@@ -52,42 +47,18 @@ Partial Class Form1
         Me.label3 = New System.Windows.Forms.Label()
         Me.grafico = New System.Windows.Forms.DataVisualization.Charting.Chart()
         Me.TablaDatos = New System.Windows.Forms.DataGridView()
+        Me.Inferior = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.Superior = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.FO = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.FE = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.label1 = New System.Windows.Forms.Label()
         Me.label10 = New System.Windows.Forms.Label()
         Me.label6 = New System.Windows.Forms.Label()
         Me.Label16 = New System.Windows.Forms.Label()
         Me.Label17 = New System.Windows.Forms.Label()
-        Me.Inferior = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.Superior = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.FO = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.FE = New System.Windows.Forms.DataGridViewTextBoxColumn()
         CType(Me.grafico, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.TablaDatos, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
-        '
-        'txtV
-        '
-        Me.txtV.BackColor = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(128, Byte), Integer), CType(CType(255, Byte), Integer))
-        Me.txtV.Enabled = False
-        Me.txtV.Font = New System.Drawing.Font("Arial Rounded MT Bold", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtV.Location = New System.Drawing.Point(883, 299)
-        Me.txtV.Margin = New System.Windows.Forms.Padding(4)
-        Me.txtV.Name = "txtV"
-        Me.txtV.Size = New System.Drawing.Size(56, 26)
-        Me.txtV.TabIndex = 42
-        Me.txtV.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
-        '
-        'TxtChiCuadrado
-        '
-        Me.TxtChiCuadrado.BackColor = System.Drawing.Color.Aqua
-        Me.TxtChiCuadrado.Enabled = False
-        Me.TxtChiCuadrado.Font = New System.Drawing.Font("Arial Rounded MT Bold", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.TxtChiCuadrado.Location = New System.Drawing.Point(761, 299)
-        Me.TxtChiCuadrado.Margin = New System.Windows.Forms.Padding(4)
-        Me.TxtChiCuadrado.Name = "TxtChiCuadrado"
-        Me.TxtChiCuadrado.Size = New System.Drawing.Size(60, 26)
-        Me.TxtChiCuadrado.TabIndex = 36
-        Me.TxtChiCuadrado.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
         '
         'TxtDesv
         '
@@ -126,7 +97,7 @@ Partial Class Form1
         '
         Me.LblDistribucion.AutoSize = True
         Me.LblDistribucion.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.LblDistribucion.Location = New System.Drawing.Point(97, 146)
+        Me.LblDistribucion.Location = New System.Drawing.Point(67, 144)
         Me.LblDistribucion.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.LblDistribucion.Name = "LblDistribucion"
         Me.LblDistribucion.Size = New System.Drawing.Size(153, 25)
@@ -138,10 +109,10 @@ Partial Class Form1
         Me.CmbDistribuciones.AccessibleRole = System.Windows.Forms.AccessibleRole.TitleBar
         Me.CmbDistribuciones.FormattingEnabled = True
         Me.CmbDistribuciones.Items.AddRange(New Object() {"UNIFORME", "EXPONENCIAL", "NORMAL"})
-        Me.CmbDistribuciones.Location = New System.Drawing.Point(304, 145)
+        Me.CmbDistribuciones.Location = New System.Drawing.Point(241, 145)
         Me.CmbDistribuciones.Margin = New System.Windows.Forms.Padding(4)
         Me.CmbDistribuciones.Name = "CmbDistribuciones"
-        Me.CmbDistribuciones.Size = New System.Drawing.Size(55, 24)
+        Me.CmbDistribuciones.Size = New System.Drawing.Size(122, 24)
         Me.CmbDistribuciones.TabIndex = 21
         '
         'BtnGenerar
@@ -172,10 +143,10 @@ Partial Class Form1
         '
         Me.txtCantidad.Enabled = False
         Me.txtCantidad.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtCantidad.Location = New System.Drawing.Point(255, 618)
+        Me.txtCantidad.Location = New System.Drawing.Point(237, 618)
         Me.txtCantidad.Margin = New System.Windows.Forms.Padding(4)
         Me.txtCantidad.Name = "txtCantidad"
-        Me.txtCantidad.Size = New System.Drawing.Size(52, 30)
+        Me.txtCantidad.Size = New System.Drawing.Size(118, 30)
         Me.txtCantidad.TabIndex = 43
         '
         'txtA
@@ -222,39 +193,6 @@ Partial Class Form1
         Me.label15.TabIndex = 72
         Me.label15.Text = "INTERVALOS:"
         '
-        'label14
-        '
-        Me.label14.AutoSize = True
-        Me.label14.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.label14.Location = New System.Drawing.Point(831, 299)
-        Me.label14.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
-        Me.label14.Name = "label14"
-        Me.label14.Size = New System.Drawing.Size(42, 25)
-        Me.label14.TabIndex = 71
-        Me.label14.Text = "VS"
-        '
-        'label13
-        '
-        Me.label13.AutoSize = True
-        Me.label13.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.label13.Location = New System.Drawing.Point(945, 299)
-        Me.label13.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
-        Me.label13.Name = "label13"
-        Me.label13.Size = New System.Drawing.Size(142, 25)
-        Me.label13.TabIndex = 70
-        Me.label13.Text = "Chi Tabulado"
-        '
-        'label12
-        '
-        Me.label12.AutoSize = True
-        Me.label12.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.label12.Location = New System.Drawing.Point(595, 299)
-        Me.label12.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
-        Me.label12.Name = "label12"
-        Me.label12.Size = New System.Drawing.Size(148, 25)
-        Me.label12.TabIndex = 68
-        Me.label12.Text = "Chi Calculado"
-        '
         'label11
         '
         Me.label11.AutoSize = True
@@ -283,7 +221,7 @@ Partial Class Form1
         '
         Me.label7.AutoSize = True
         Me.label7.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.label7.Location = New System.Drawing.Point(120, 622)
+        Me.label7.Location = New System.Drawing.Point(81, 621)
         Me.label7.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.label7.Name = "label7"
         Me.label7.Size = New System.Drawing.Size(121, 25)
@@ -337,27 +275,27 @@ Partial Class Form1
         'grafico
         '
         Me.grafico.BorderlineWidth = 3
-        ChartArea1.Name = "ChartArea1"
-        Me.grafico.ChartAreas.Add(ChartArea1)
+        ChartArea2.Name = "ChartArea1"
+        Me.grafico.ChartAreas.Add(ChartArea2)
         Me.grafico.Cursor = System.Windows.Forms.Cursors.Default
-        Legend1.Name = "Legend1"
-        Me.grafico.Legends.Add(Legend1)
+        Legend2.Name = "Legend1"
+        Me.grafico.Legends.Add(Legend2)
         Me.grafico.Location = New System.Drawing.Point(447, 373)
         Me.grafico.Margin = New System.Windows.Forms.Padding(4)
         Me.grafico.Name = "grafico"
         Me.grafico.Palette = System.Windows.Forms.DataVisualization.Charting.ChartColorPalette.Excel
         Me.grafico.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Series1.ChartArea = "ChartArea1"
-        Series1.Legend = "Legend1"
-        Series1.Name = "FO"
-        Me.grafico.Series.Add(Series1)
+        Series2.ChartArea = "ChartArea1"
+        Series2.Legend = "Legend1"
+        Series2.Name = "FO"
+        Me.grafico.Series.Add(Series2)
         Me.grafico.Size = New System.Drawing.Size(898, 443)
         Me.grafico.TabIndex = 51
         Me.grafico.Text = "Histograma"
-        Title1.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Title1.Name = "HISTOGRAMA DE FO"
-        Title1.Text = "HISTOGRAMA DE FO"
-        Me.grafico.Titles.Add(Title1)
+        Title2.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Title2.Name = "HISTOGRAMA DE FO"
+        Title2.Text = "HISTOGRAMA DE FO"
+        Me.grafico.Titles.Add(Title2)
         '
         'TablaDatos
         '
@@ -372,6 +310,38 @@ Partial Class Form1
         Me.TablaDatos.RowHeadersWidth = 51
         Me.TablaDatos.Size = New System.Drawing.Size(725, 229)
         Me.TablaDatos.TabIndex = 49
+        '
+        'Inferior
+        '
+        Me.Inferior.HeaderText = "Inferior"
+        Me.Inferior.MinimumWidth = 6
+        Me.Inferior.Name = "Inferior"
+        Me.Inferior.ReadOnly = True
+        Me.Inferior.Width = 125
+        '
+        'Superior
+        '
+        Me.Superior.HeaderText = "Superior"
+        Me.Superior.MinimumWidth = 6
+        Me.Superior.Name = "Superior"
+        Me.Superior.ReadOnly = True
+        Me.Superior.Width = 125
+        '
+        'FO
+        '
+        Me.FO.HeaderText = "FO"
+        Me.FO.MinimumWidth = 6
+        Me.FO.Name = "FO"
+        Me.FO.ReadOnly = True
+        Me.FO.Width = 125
+        '
+        'FE
+        '
+        Me.FE.HeaderText = "FE"
+        Me.FE.MinimumWidth = 6
+        Me.FE.Name = "FE"
+        Me.FE.ReadOnly = True
+        Me.FE.Width = 125
         '
         'label1
         '
@@ -432,38 +402,6 @@ Partial Class Form1
         Me.Label17.TabIndex = 75
         Me.Label17.Text = " " & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "                                                        " & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10)
         '
-        'Inferior
-        '
-        Me.Inferior.HeaderText = "Inferior"
-        Me.Inferior.MinimumWidth = 6
-        Me.Inferior.Name = "Inferior"
-        Me.Inferior.ReadOnly = True
-        Me.Inferior.Width = 125
-        '
-        'Superior
-        '
-        Me.Superior.HeaderText = "Superior"
-        Me.Superior.MinimumWidth = 6
-        Me.Superior.Name = "Superior"
-        Me.Superior.ReadOnly = True
-        Me.Superior.Width = 125
-        '
-        'FO
-        '
-        Me.FO.HeaderText = "FO"
-        Me.FO.MinimumWidth = 6
-        Me.FO.Name = "FO"
-        Me.FO.ReadOnly = True
-        Me.FO.Width = 125
-        '
-        'FE
-        '
-        Me.FE.HeaderText = "FE"
-        Me.FE.MinimumWidth = 6
-        Me.FE.Name = "FE"
-        Me.FE.ReadOnly = True
-        Me.FE.Width = 125
-        '
         'Form1
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(8.0!, 16.0!)
@@ -472,9 +410,6 @@ Partial Class Form1
         Me.Controls.Add(Me.Label16)
         Me.Controls.Add(Me.CmbIntervalos)
         Me.Controls.Add(Me.label15)
-        Me.Controls.Add(Me.label14)
-        Me.Controls.Add(Me.label13)
-        Me.Controls.Add(Me.label12)
         Me.Controls.Add(Me.label11)
         Me.Controls.Add(Me.label9)
         Me.Controls.Add(Me.label7)
@@ -486,8 +421,6 @@ Partial Class Form1
         Me.Controls.Add(Me.TablaDatos)
         Me.Controls.Add(Me.label1)
         Me.Controls.Add(Me.txtCantidad)
-        Me.Controls.Add(Me.txtV)
-        Me.Controls.Add(Me.TxtChiCuadrado)
         Me.Controls.Add(Me.TxtDesv)
         Me.Controls.Add(Me.TxtMedia)
         Me.Controls.Add(Me.txtB)
@@ -509,8 +442,6 @@ Partial Class Form1
         Me.PerformLayout()
 
     End Sub
-    Friend WithEvents txtV As System.Windows.Forms.TextBox
-    Friend WithEvents TxtChiCuadrado As System.Windows.Forms.TextBox
     Friend WithEvents TxtDesv As System.Windows.Forms.TextBox
     Friend WithEvents TxtMedia As System.Windows.Forms.TextBox
     Friend WithEvents TxtLambda As System.Windows.Forms.TextBox
@@ -523,9 +454,6 @@ Partial Class Form1
     Friend WithEvents txtB As System.Windows.Forms.TextBox
     Private WithEvents CmbIntervalos As ComboBox
     Private WithEvents label15 As Label
-    Private WithEvents label14 As Label
-    Private WithEvents label13 As Label
-    Private WithEvents label12 As Label
     Private WithEvents label11 As Label
     Private WithEvents label9 As Label
     Private WithEvents label7 As Label

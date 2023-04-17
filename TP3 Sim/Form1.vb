@@ -1,6 +1,9 @@
 ﻿
 
 
+Imports System.Reflection
+Imports System.Security.Cryptography
+Imports System.Text.RegularExpressions
 Imports TP3_Sim.GeneradorVariables
 Public Class Form1
     Dim random As GeneradorVariables
@@ -8,7 +11,7 @@ Public Class Form1
     Private Sub Form1_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
 
         random = New GeneradorVariables
-        inicializarChart()
+        'inicializarChart()
         CmbDistribuciones.SelectedIndex = -1
         CmbDistribuciones.Focus()
 
@@ -17,16 +20,15 @@ Public Class Form1
 
 
     Private Sub BtnGenerar_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles BtnGenerar.Click
-
         inicializarChart()
-            BtnGenerar.Enabled = True
-            For index = 1 To Integer.Parse(TxtCantidad.Text)
+        BtnGenerar.Enabled = True
+        For index = 1 To Integer.Parse(txtCantidad.Text)
 
-                If CmbDistribuciones.SelectedIndex = 0 Then
+            If CmbDistribuciones.SelectedIndex = 0 Then
                 ListaAleatorios.Items.Add(random.generarUniforme(Integer.Parse(txtA.Text), Integer.Parse(txtB.Text)))
             End If
 
-                If CmbDistribuciones.SelectedIndex = 1 Then
+            If CmbDistribuciones.SelectedIndex = 1 Then
                 ListaAleatorios.Items.Add(random.generarExponencialNegativa(1 / (Double.Parse(TxtLambda.Text.Replace(".", ",")))))
 
             End If
@@ -37,12 +39,13 @@ Public Class Form1
             End If
         Next index
 
-            graficar()
-        calcularDatosTabla()
+        graficar()
         BtnGenerar.Enabled = False
 
     End Sub
 
+    ' inicializarChart(): grafica las opciones generales del grafico, titulos y a agregar las frecuencias observadas 
+    '                    para cada distribucion
     Private Sub inicializarChart()
         grafico.ChartAreas.Clear()
         grafico.ChartAreas.Add(0)
@@ -60,26 +63,33 @@ Public Class Form1
 
     End Sub
 
+    ' graficar(): esta funcion va a llamar a las funciones de graficar distribucion, segun el combo de distribuciones
+    '            que haya seleccionado el usuario
     Private Sub graficar()
 
         Select Case CmbDistribuciones.SelectedIndex
             Case 0
-                graficarDistribuciones(Double.Parse(TxtA.Text), Double.Parse(TxtB.Text), False)
+                graficarDistribucionesUniforme(Double.Parse(txtA.Text), Double.Parse(txtB.Text), False)
             Case 1
-                graficarDistribuciones(0, obtenerMax(), False)
-
+                graficarDistribucionesExponencial(0, obtenerMax(), False)
             Case 2
-                graficarDistribuciones(obtenerMin(), obtenerMax(), False)
+                graficarDistribucionesNormal(obtenerMin(), obtenerMax(), False, media(), desviacionEstandar())
         End Select
 
 
     End Sub
 
-    Private Sub graficarDistribuciones(ByVal min As Double, ByVal max As Double, ByVal sinIntervalos As Boolean)
+    'graficarDistribucionesUniforme(): funcion que nos ayuda a graficar la distribucion Uniforme y a llenar la tabla
+    '                                  de datos de las frecuencias y los limites
+    Private Sub graficarDistribucionesUniforme(ByVal min As Double, ByVal max As Double, ByVal sinIntervalos As Boolean)
         Dim minimo As Double = min
         Dim maximo As Double = max
         Dim acum As Integer
-        Dim fe As Double = Double.Parse(txtCantidad.Text) / Double.Parse(CmbIntervalos.Text)
+        Dim a As Double = Math.Round(Double.Parse(txtA.Text), 4)
+        Dim b As Double = Math.Round(Double.Parse(txtB.Text), 4)
+        Dim fe As Double = Math.Round(((a + b) / 2), 4)
+
+
         If sinIntervalos = False Then
 
             Dim sim As String = ")"
@@ -140,8 +150,147 @@ Public Class Form1
 
 
 
+    Private Sub graficarDistribucionesExponencial(ByVal min As Double, ByVal max As Double, ByVal sinIntervalos As Boolean)
+        Dim minimo As Double = min
+        Dim maximo As Double = max
+        Dim acum As Integer
+        Dim n As Double = Double.Parse(txtCantidad.Text)
+        Dim lambda As Double = Double.Parse(TxtLambda.Text)
+        Dim marca As Double '= (maximo + minimo) / 2
 
 
+        If sinIntervalos = False Then
+
+            Dim sim As String = ")"
+            ancho = (maximo - minimo) / Double.Parse(CmbIntervalos.Text)
+
+
+            For index = 0 To CmbIntervalos.Text - 1
+                acum = 0
+                'num es el limite inferior
+                Dim num As Double = (ancho * index) + minimo
+
+                For Each item As Double In ListaAleatorios.Items
+
+                    If (index < CmbIntervalos.Text - 1) Then
+                        If (num <= item) And ((num + ancho) > item) Then
+                            acum += 1
+
+                        End If
+                    Else
+                        If (num <= item) And ((num + ancho) >= item) Then
+                            acum += 1
+                            sim = "]"
+                        End If
+                    End If
+
+
+                Next
+                marca = (num + num + ancho) / 2
+                Dim fd As Double = (lambda * Math.Pow(Math.E, -lambda * marca)) * num
+                Dim fa As Double = ((1 - Math.Pow(Math.E, -lambda * (num + ancho))) - (1 - Math.Pow(Math.E, -lambda * num)))
+                Dim fe As Double = Math.Round(fa / n, 4)
+                grafico.Series(0).Points.AddXY("[ " & String.Format("{0:C4}", num).Replace("$", "").Replace("€", "") & " _ " & String.Format("{0:C4}", (num + ancho)).Replace("$", "").Replace("€", "") & sim, acum)
+                TablaDatos.Rows.Add(num, num + ancho, acum, fe)
+            Next
+
+
+
+        Else
+
+            For index = min To max
+                acum = 0
+                For Each item As Integer In ListaAleatorios.Items
+                    If item = index Then
+                        acum += 1
+                    End If
+                Next
+
+                grafico.Series(0).Points.AddXY(index, acum)
+
+            Next
+
+
+
+        End If
+        For index = 0 To grafico.Series(0).Points.Count - 1
+            grafico.Series(0).Points(index).Label = grafico.Series(0).Points(index).YValues(0)
+
+        Next
+
+
+    End Sub
+
+    Private Sub graficarDistribucionesNormal(ByVal min As Double, ByVal max As Double, ByVal sinIntervalos As Boolean, ByVal media As Double, ByVal desviacion As Double)
+        Dim minimo As Double = min
+        Dim maximo As Double = max
+        Dim acum As Integer
+        Dim marca As Double '= (maximo + minimo) / 2
+        Dim n As Double = Double.Parse(txtCantidad.Text) - 1
+        Dim m As Double = media
+        Dim desv As Double = desviacion
+        Dim numerador As Double
+        Dim denominador As Double = (desv * Math.Sqrt(2 * Math.PI))
+        Dim fd As Double
+        Dim fe As Double
+
+        If sinIntervalos = False Then
+
+            Dim sim As String = ")"
+            ancho = Math.Round((maximo - minimo) / Double.Parse(CmbIntervalos.Text), 4)
+
+            For index = 0 To CmbIntervalos.Text - 1
+                acum = 0
+                Dim num As Double = Math.Round((ancho * index) + minimo, 4)
+
+                For Each item As Double In ListaAleatorios.Items
+                    If (index < CmbIntervalos.Text - 1) Then
+                        If (num <= item) And ((num + ancho) > item) Then
+                            acum += 1
+
+                        End If
+                    Else
+                        If (num <= item) And ((num + ancho) >= item) Then
+                            acum += 1
+                            sim = "]"
+                        End If
+                    End If
+
+                Next
+                marca = Math.Round((num + num + ancho) / 2, 4)
+                numerador = Math.Exp(-0.5) * Math.Pow((marca - m) / desv, 2)
+                grafico.Series(0).Points.AddXY("[ " & String.Format("{0:C4}", num).Replace("$", "").Replace("€", "") & " _ " & String.Format("{0:C4}", (num + ancho)).Replace("$", "").Replace("€", "") & sim, acum)
+                fd = Math.Round((numerador / denominador) * ancho ,4)
+                fe = Math.Round((n + 1) * fd, 4)
+                TablaDatos.Rows.Add(num, num + ancho, acum, fe)
+            Next
+
+
+
+        Else
+
+            For index = min To max
+                acum = 0
+                For Each item As Integer In ListaAleatorios.Items
+                    If item = index Then
+                        acum += 1
+                    End If
+                Next
+
+                grafico.Series(0).Points.AddXY(index, acum)
+
+            Next
+
+
+
+        End If
+        For index = 0 To grafico.Series(0).Points.Count - 1
+            grafico.Series(0).Points(index).Label = grafico.Series(0).Points(index).YValues(0)
+
+        Next
+
+
+    End Sub
     Private Sub CmbDistribuciones_SelectedIndexChanged(sender As System.Object, e As System.EventArgs) Handles CmbDistribuciones.SelectedIndexChanged
         limpiarCmb()
         inicializarChart()
@@ -180,14 +329,14 @@ Public Class Form1
 
     Private Sub limpiarCmb()
 
-        For Each item As Control In Me.Controls
-            If (item.GetType.ToString = "System.Windows.Forms.MaskedTextBox") Or (item.GetType.ToString = "System.Windows.Forms.TextBox") Then
-                item.Text = ""
-                CmbIntervalos.SelectedIndex = -1
-            End If
-        Next
-
-
+        txtA.Text = ""
+        txtB.Text = ""
+        txtCantidad.Text = ""
+        TxtDesv.Text = ""
+        TxtLambda.Text = ""
+        TxtMedia.Text = ""
+        CmbIntervalos.SelectedIndex = -1
+        TablaDatos.Rows.Clear()
 
     End Sub
     Private Function obtenerMax() As Double
@@ -212,218 +361,29 @@ Public Class Form1
         Return min
     End Function
 
-
-    ''Esto calculos de datos no nos sirve porque es para los chi, asi que los sacaria para esta entrega
-    Private Sub calcularDatosTabla()
-        Select Case CmbDistribuciones.SelectedIndex
-            Case 0
-                DatosUniforme()
-            Case 1
-                DatosExponencialNegativa()
-            Case 2
-                DatosNormal()
-
-        End Select
-    End Sub
-
-    Private Sub DatosUniforme()
-        Dim valor As Double
-        Dim fe As Double = Double.Parse(txtCantidad.Text) / Double.Parse(CmbIntervalos.Text)
-        Dim k As Double = Double.Parse(CmbIntervalos.Text)
-
-
-        For index = Integer.Parse(txtA.Text) To k - 1
-            valor += ((fe - grafico.Series(0).Points(index).YValues(0)) ^ 2) / fe
-
+    Private Function desviacionEstandar() As Double
+        Dim m As Double = media()
+        Dim sumatoria As Double
+        Dim cantidad As Double = Double.Parse(txtCantidad.Text) - 1
+        Dim resta As Double
+        Dim desvEst As Double
+        For Each item As Double In ListaAleatorios.Items
+            resta = item - m
+            sumatoria = Math.Pow(resta, 2)
         Next
-
-        TxtChiCuadrado.Text = String.Format("{0:C4}", valor).Replace("$", "").Replace("€", "")
-        txtV.Text = String.Format("{0:C0}", (CmbIntervalos.Text - 1)).Replace("$", "").Replace("€", "")
-    End Sub
-
-
-    Private Sub DatosExponencialNegativa()
-
-        Dim valor As Double
-        Dim frecObservada() As Double = frecuenciaObs()
-
-
-        Dim marcaClase(frecObservada.Length - 1) As Double
-
-        For index = 0 To Integer.Parse(CmbIntervalos.Text) - 1
-
-            Dim limInf As Double = Double.Parse(Split(grafico.Series(0).Points(index).AxisLabel.Replace("[", "").Replace(".", ","), "_", 2)(0))
-            Dim limsup As Double = Double.Parse(Split(grafico.Series(0).Points(index).AxisLabel.Replace(")", "").Replace("]", "").Replace(".", ","), "_", 2)(1))
-            marcaClase(index) = (limInf + limsup) / 2
-
-        Next
-
-        Dim frecEsperada(frecObservada.Length - 1) As Double
-
-
-        For index = 0 To frecEsperada.Length - 1
-
-
-            frecEsperada(index) = Double.Parse(TxtLambda.Text.Replace(".", ",")) * Math.Exp(Double.Parse(TxtLambda.Text.Replace(".", ",") * -1 * marcaClase(index))) * Integer.Parse(txtCantidad.Text)
-
-        Next
-
-
-        Dim nuevosVectores As List(Of Double()) = tratarFrecuencias(frecObservada, frecEsperada)
-
-        frecObservada = nuevosVectores.Item(0)
-        frecEsperada = nuevosVectores.Item(1)
-
-        For index = 0 To frecEsperada.Length - 1
-
-            valor += (Math.Pow((frecEsperada(index) - frecObservada(index)), 2) / frecEsperada(index))
-
-        Next
-
-        TxtChiCuadrado.Text = String.Format("{0:C4}", valor).Replace("$", "").Replace("€", "")
-
-    End Sub
-    ''El tratamiento de frecuencias tambien lo sacaria porque son para los chi tambien. no nos sirve para esta entrega
-    Private Function frecuenciaObs() As Double()
-        Dim frecObservada(Double.Parse(grafico.Series(0).Points.Count) - 1) As Double
-
-
-        For index = 0 To Integer.Parse(grafico.Series(0).Points.Count) - 1
-            frecObservada(index) = Double.Parse(grafico.Series(0).Points(index).Label)
-        Next
-
-        Return frecObservada
+        desvEst = Math.Round(sumatoria / cantidad, 4)
+        Return desvEst
     End Function
 
-    Private Sub DatosNormal()
-
-
-        Dim frecObservada() As Double = frecuenciaObs()
-
-
-        Dim frecEsperada(frecObservada.Length - 1) As Double
-        For index = 0 To frecEsperada.Length - 1
-            Dim limInf As Double = Double.Parse(Split(grafico.Series(0).Points(index).AxisLabel.Replace("[", "").Replace(".", ","), "_", 2)(0))
-
-            Dim limsup As Double = Double.Parse(Split(grafico.Series(0).Points(index).AxisLabel.Replace(")", "").Replace("]", "").Replace(".", ","), "_", 2)(1))
-
-            frecEsperada(index) = (((PrPuntualNormal(limInf) + PrPuntualNormal(limsup)) / 2) * ancho) * Double.Parse(txtCantidad.Text)
-
-
+    Private Function media() As Double
+        Dim acum As Double
+        Dim cantidad As Double = Double.Parse(txtCantidad.Text)
+        Dim m As Double
+        For Each item As Double In ListaAleatorios.Items
+            acum = +item
         Next
-
-        Dim nuevosVectores As List(Of Double()) = tratarFrecuencias(frecObservada, frecEsperada)
-
-        frecObservada = nuevosVectores.Item(0)
-        frecEsperada = nuevosVectores.Item(1)
-
-
-        Dim valor As Double = 0
-        For index = 0 To frecEsperada.Length - 1
-
-            valor += (Math.Pow((frecEsperada(index) - frecObservada(index)), 2) / frecEsperada(index))
-
-        Next
-
-
-        TxtChiCuadrado.Text = String.Format("{0:C4}", valor).Replace("$", "").Replace("€", "")
-
-
-
-    End Sub
-    ''Esto fuera tambien
-    Private Function tratarFrecuencias(ByVal frecObservada As Double(), ByVal frecEsperada As Double()) As List(Of Double())
-
-        Dim nuevosVectores As List(Of Double()) = New List(Of Double())
-
-        Dim largo As Integer = frecEsperada.Length - 1
-        For index = 0 To largo
-
-            If index <= largo Then
-
-                If (frecEsperada(index) < 5) Then
-
-                    If (index = 0 Or (index > 0 And index < (frecEsperada.Length - 1))) Then
-
-                        frecEsperada(index) = frecEsperada(index) + frecEsperada(index + 1)
-                        frecEsperada(index + 1) = -1
-                        frecObservada(index) = frecObservada(index) + frecObservada(index + 1)
-                        frecObservada(index + 1) = -1
-                    Else
-                        frecEsperada(index) = frecEsperada(index) + frecEsperada(index - 1)
-                        frecEsperada(index - 1) = -1
-                        frecObservada(index) = frecObservada(index) + frecObservada(index - 1)
-                        frecObservada(index - 1) = -1
-
-                    End If
-
-                    frecEsperada = obtenerVectorSinNulos(frecEsperada)
-                    frecObservada = obtenerVectorSinNulos(frecObservada)
-                    largo -= 1
-                    index = -1
-
-                End If
-            Else
-                Exit For
-
-            End If
-
-        Next
-
-
-        nuevosVectores.Add(frecObservada)
-        nuevosVectores.Add(frecEsperada)
-        If (CmbDistribuciones.SelectedIndex = 1) Then
-            txtV.Text = String.Format("{0:C0}", frecEsperada.Length - 2).Replace("$", "").Replace("€", "")
-        End If
-        If (CmbDistribuciones.SelectedIndex = 2) Then
-            txtV.Text = String.Format("{0:C0}", frecEsperada.Length - 3).Replace("$", "").Replace("€", "")
-        End If
-        Return nuevosVectores
+        m = Math.Round(acum / cantidad)
+        Return m
     End Function
-
-    Private Function obtenerVectorSinNulos(ByVal vector As Double()) As Double()
-        Dim count As Integer = 0
-
-        For index = 0 To vector.Length - 1
-
-            If vector(index) <> -1 Then
-                count += 1
-
-            End If
-        Next
-
-        Dim nuevoVector(count - 1) As Double
-
-        Dim j As Integer = 0
-        For index = 0 To vector.Length - 1
-            If vector(index) <> -1 Then
-                nuevoVector(j) = vector(index)
-                j += 1
-
-            End If
-        Next
-
-        Return nuevoVector
-    End Function
-
-    Private Function PrPuntualNormal(x As Double) As Double
-        Dim desvEstandar As Double = Double.Parse(TxtDesv.Text.Replace(".", ","))
-        Dim media As Double = Double.Parse(TxtMedia.Text.Replace(".", ","))
-        Return ((1 / (desvEstandar * Math.Sqrt(2 * Math.PI))) * Math.Exp(-1 * 0.5 * Math.Pow((x - media) / desvEstandar, 2)))
-    End Function
-
-    Private Sub txtIntervalos_TextChanged(sender As Object, e As EventArgs)
-
-    End Sub
-
-    Private Sub label2_Click(sender As Object, e As EventArgs)
-
-    End Sub
-
-
-
-
-
 End Class
 
